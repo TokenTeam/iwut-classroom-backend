@@ -167,7 +167,7 @@ def process_classrooms(cursor, db):
         
         campus = code[:4]
         building = code[:6]
-        roomcode = code[:-3]
+        roomcode = code[-3:]
 
         insert_to_table(db, cursor, process_classroom(rows), campus, building, roomcode)
 
@@ -192,7 +192,7 @@ def update_database():
 
     # request_list()
     
-if __name__ == '__main__':
+def init_database():
     try:
         db = mysql.connector.connect(**config)
         print("成功连接到数据库！")
@@ -204,11 +204,15 @@ if __name__ == '__main__':
 
     delete_table(cursor, db)
     create_table(cursor, db)
-    
-    process_classrooms(cursor, db)
-    
     cursor.close()
     db.close()
+
+
+if __name__ == '__main__':
+    # init_database()
+    # update_database()
+    pass
+    
 
     
 
