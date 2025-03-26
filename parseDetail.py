@@ -187,5 +187,6 @@ def update_database():
     cursor.close()
     db.close()
 
-    # request_list()
-    
+
+if __name__ == '__main__':
+    pass
