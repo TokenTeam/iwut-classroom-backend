@@ -1,7 +1,16 @@
+:
+        db = mysql.connector.connect(**config)
+        print("成功连接到数据库！")
+    except mysql.connector.Error as e:
+        print(f"数据库连接失败：{e}")
+        exit(1)
+        
+    cursor = db.cursor()
 
-                    
-    # for week in range(0, len(marks)):
-    #     for day in range(0, len(marks[week])):
-    #         for i in range(0, len(marks[week][day])):
-    #             if marks[week][day][i] == 0:
-    #                 d
+    delete_table(cursor, db)
+    create_table(cursor, db)
+    
+    process_classrooms(cursor, db)
+    
+    cursor.close()
+    db.close()
