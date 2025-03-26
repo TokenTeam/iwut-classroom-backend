@@ -102,7 +102,7 @@ def process_classroom(rows):
         for is_class in cource["SKZC"]:
             if is_class == '1':
                 for k in range(l-1, r):
-                    marks[week][cource["SKXQ"]][k] = 1
+                    marks[week][cource["SKXQ"]-1][k] = 1
             week +=1
     
     return marks
@@ -124,7 +124,7 @@ def insert_to_table(db, cursor, marks, campus, building, classroom):
         for day in range(0, len(marks[week])): # 星期
             for i in range(0, len(marks[week][day])): # 节数
                 if marks[week][day][i] == 0:
-                    data.append((week+1, day+1, campus, building, i, classroom, classroom, classroom))
+                    data.append((week+1, day+1, campus, building, i+1, classroom, classroom, classroom))
     
     # data = [(1, 1, "0101", "010102", 1, "101", "101", "101")]
     # data = [(int(1), int(1), str("东院"), str("弘毅楼"), int(1), str("101"), str("101"))]
@@ -147,13 +147,16 @@ def process_classrooms(cursor, db):
     对所有教室进行处理，加到数据库
     '''
     with open('list.json', 'r', encoding='utf-8') as list:
-        classroom_codes = json.load(list).get("datas", {}).get("jscx", {}).get("rows", []).get("JASDM")
+        classroom_rows = json.load(list).get("datas", {}).get("jscx", {}).get("rows", [])
     
     building_code_keys = building_code_to_string.keys()
     
-    for code in tdqm(classroom_codes,"Processing classroom:"):
+    for row in tdqm(classroom_rows,"Processing classroom:"):
+        code = row.get("JASDM", {})
         if code[:6] not in building_code_keys:
             continue
+
+        print(f"处理 {code} 中")
 
          # 读取 JSON 文件
         with open(f"details/{code}.json", 'r', encoding='utf-8') as file:
@@ -187,6 +190,25 @@ def update_database():
     cursor.close()
     db.close()
 
-
+    # request_list()
+    
 if __name__ == '__main__':
-    pass
+    try:
+        db = mysql.connector.connect(**config)
+        print("成功连接到数据库！")
+    except mysql.connector.Error as e:
+        print(f"数据库连接失败：{e}")
+        exit(1)
+        
+    cursor = db.cursor()
+
+    delete_table(cursor, db)
+    create_table(cursor, db)
+    
+    process_classrooms(cursor, db)
+    
+    cursor.close()
+    db.close()
+
+    
+
