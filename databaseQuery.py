@@ -1,6 +1,43 @@
 import mysql.connector
 import redis
 
+
+building_code_to_string = {
+    "010102": "弘毅楼(附楼)",
+    "010103": "弘毅楼(主楼)",
+    "010106": "致远楼",
+
+    "010201": "东教学楼",
+
+    "020101": "爱特楼",
+    "020102": "北教一",
+    "020103": "北教二",
+    "020104": "北教三",
+    "020105": "学海楼",
+
+    "020201": "博学北楼",
+    "020202": "博学东楼",
+    "020203": "博学西楼",
+    "020204": "博学主楼",
+
+    "030102": "教学大楼",
+    "030201": "航海楼",
+}
+
+# 0101xx 东院
+# 0102xx 西院
+# 0201xx 鉴湖
+# 0202xx 南湖
+# 03xxxx 余区
+building_code_to_campus = {
+    "0101": "东院",
+    "0102": "西院",
+    "0201": "鉴湖校区",
+    "0202": "南湖校区",
+    "0301": "余家头校区",
+    "0302": "余家头校区",
+}
+
 class mysql_connector:
     def __init__(self, config):
         self.config = config
@@ -57,6 +94,7 @@ class redis_connector:
         self.port = port
         self.db = db
         
+        
         self.connect()
         
         
@@ -83,6 +121,18 @@ class redis_connector:
             result = result & temp
             
         return sorted(list(result))
+    
+    def redis_query_available_buildings(self, campus, start_time, end_time):
+        result = []
+        for building in building_code_to_string.keys():
+            for cl in range(start_time, end_time + 1):
+                temp = self.redis_single_query(campus, building, cl)
+                if len(temp) > 0:
+                    result.append(building)
+                    break
+        
+        return result
+
     
     def close(self):
         self.redis_conn.close()

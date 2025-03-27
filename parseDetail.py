@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 
+'''
+解析教室详情数据
+1. 读取 list.json 文件，提取教室代码，
+2. 对所有教室进行处理，加到 mysql 数据库
+'''
+
 import json
 import mysql.connector
 from tqdm import tqdm as tdqm
+from os import getenv
 
 building_code_to_string = {
     "010102": "弘毅楼(附楼)",
@@ -42,10 +49,10 @@ building_code_to_campus = {
 
 # 数据库连接参数
 config = {
-    'user': 'root',
-    'password': '1234_qwer',
-    'host': 'localhost',
-    'database': 'mydatabase'
+    'user': getenv("MYSQL_USER"),
+    'password': getenv("MYSQL_PASSWORD"),
+    'host': getenv("MYSQL_HOST"),
+    'database': getenv("MYSQL_DATABASE"),
 }
 
 
@@ -209,8 +216,8 @@ def init_database():
 
 
 if __name__ == '__main__':
-    # init_database()
-    # update_database()
+    init_database()
+    update_database()
     pass
     
 

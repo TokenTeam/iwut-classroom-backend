@@ -6,6 +6,42 @@
 
 
 
+## 如何使用
+
+后端运行起来时，你可以发送如下请求
+
+1. GET   /get_classrooms  获取具体校区，具体楼栋，今天具体时间的空教室信息   
+
+   参数：
+
+   - campus_code ：校区代码，详情见下
+
+   - building_code:   楼栋代码
+
+   - start_time： 第几节开始
+
+   - end_time： 第几节结束
+
+     返回"data" 里是空闲教室列表
+
+2. GET  /get_available_buildings  获取具体校区，今天具体时间的 有空教室的楼栋
+
+   参数：
+
+   - campus_code ：校区代码，详情见下
+
+   - start_time： 第几节开始
+
+   - end_time： 第几节结束
+
+     返回"data" 里是空闲教室列表
+
+3. POST /update-list    重新爬取详细课程信息，耗时较长
+
+   参数： token，在docker 构建时设定
+
+
+
 ## 文件结构
 
 - /details/xxx.json	存储每间教室的课程信息，文件名为教室代码
@@ -65,3 +101,6 @@ building_code_to_campus = {
 }
 ```
 
+- **redis 数据库**： 存储当天的自习室信息，每天更新
+
+  格式：“校区号,教学楼号,第几节课” ： 空教室列表

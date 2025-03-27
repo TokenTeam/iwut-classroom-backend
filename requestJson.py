@@ -1,7 +1,17 @@
+'''
+运行此文件以读取教室列表，
+请求每个教室的详细信息
+
+生成 list.json 文件 - 教室列表
+生成 details 文件夹 - 教室详细信息
+'''
+
+
 import requests
 import json
 import time
 from tqdm import tqdm
+from os import getenv
 
 building_code_to_string = {
     "010102": "弘毅楼(附楼)",
@@ -50,9 +60,9 @@ def request_list():
 
     data = {
         "querySetting": '[{"name":"SFYPK","builder":"equal","linkOpt":"AND","value":"1"}]',
-        "XNXQDM": "2024-2025-2",
+        "XNXQDM": getenv("XNXQDM"),
         "*order": "+XXXQDM,+JXLDM,+JASMC",
-        "pageSize": "844",
+        "pageSize": getenv("PAGE_SIZE"),
         "pageNumber": "1"
     }
 
@@ -83,7 +93,7 @@ def request_detail(classroom_code):
         'x-requested-with': 'XMLHttpRequest'
     }
     data = {
-        'XNXQDM': '2024-2025-2',
+        'XNXQDM': getenv("XNXQDM"),
         'JASDM': classroom_code
     }
 

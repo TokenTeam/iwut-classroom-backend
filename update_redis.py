@@ -2,14 +2,15 @@ import mysql.connector
 import redis
 from datetime import datetime
 import datetime
+from os import getenv
 
 start_date = datetime.date(2025, 2, 24)
 
 mysql_config = {
-    'user': 'root',
-    'password': '1234_qwer',
-    'host': 'localhost',
-    'database': 'mydatabase'
+    'user': getenv("MYSQL_USER"),
+    'password': getenv("MYSQL_PASSWORD"),
+    'host': getenv("MYSQL_HOST"),
+    'database': getenv("MYSQL_DATABASE"),
 }
 
 # 配置 MySQL 连接
@@ -17,7 +18,7 @@ mysql_conn = mysql.connector.connect(**mysql_config)
 mysql_cursor = mysql_conn.cursor()
 
 # 配置 Redis 连接
-redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+redis_conn = redis.Redis(host=getenv("REDIS_HOST"), port=getenv("REDIS_PORT"), db=getenv("REDIS_DB"))
 
 def clear_redis():
     redis_conn.flushdb()
