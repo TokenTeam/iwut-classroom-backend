@@ -51,5 +51,8 @@ EXPOSE 80
 # Define other environment variables
 ENV NAME World
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# # Run app.py when the container launches
+# CMD ["python", "app.py"]
+
+# 设置 FastAPI 启动命令
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -62,3 +62,4 @@ Thumbs.db
 Pipfile.lock
 
 tempCodeRunnerFile.py
+docker-compose.yml
