@@ -72,6 +72,12 @@ def update_list(background_tasks: BackgroundTasks, token: str = Depends(verify_t
     background_tasks.add_task(requestJson.get_detail)
     return {"message": "任务已开始，稍后完成"}
 
+@app.post("/update-redis-now/")
+def update_redis_now():
+    update_redis.sync_mysql_to_redis()
+    return {"message": "Redis 数据库已更新"}
+
+
 
 # 在 mysql 中查找 当前周、星期、校区、楼的空教室
 

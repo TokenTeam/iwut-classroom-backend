@@ -59,4 +59,7 @@ ENV NAME World
 # CMD ["python", "app.py"]
 
 # 设置 FastAPI 启动命令
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# Run update_redis.py before starting the FastAPI app
+CMD ["sh", "-c", "python update_redis.py && uvicorn api:app --host 0.0.0.0 --port 8000"]
