@@ -19,6 +19,8 @@ ARG _XNXQDM
 ARG _PAGE_SIZE
 # 爬取的教室数
 
+ARG _COOKIE
+
 # Define environment variables for database configuration
 ENV MYSQL_HOST = ${_MYSQL_HOST}
 ENV MYSQL_USER = ${_MYSQL_USER}
@@ -33,6 +35,8 @@ ENV TOKEN = ${_TOKEN}
 
 ENV XNXQDM = ${_XNXQDM}
 ENV PAGE_SIZE = ${_PAGE_SIZE}
+
+ENV COOKIE = ${_COOKIE}
 
 # Set the working directory in the container
 WORKDIR /app
