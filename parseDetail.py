@@ -209,7 +209,7 @@ def init_database():
         
     cursor = db.cursor()
 
-    delete_table(cursor, db)
+    # delete_table(cursor, db)
     create_table(cursor, db)
     cursor.close()
     db.close()
