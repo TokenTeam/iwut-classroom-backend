@@ -8,6 +8,7 @@ import time
 from os import getenv
 
 import databaseQuery
+import parseDetail
 import requestJson
 import update_redis
 
@@ -34,6 +35,7 @@ scheduler.add_job(update_redis.sync_mysql_to_redis, trigger)
 @app.on_event("startup")
 async def start_scheduler():
     scheduler.start()
+    parseDetail.init_database()
 
 # 关闭时关闭调度器
 @app.on_event("shutdown")
