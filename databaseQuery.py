@@ -108,7 +108,13 @@ class redis_connector:
 
     def redis_single_query(self, campus, building, class_num):
         key = f"{campus},{building},{class_num}"
-        return set(self.redis_conn.get(key).decode().split(","))
+        result = self.redis_conn.get(key)
+        if result is None:
+            # 处理未找到数据的情况
+            return set()
+        return set(result.decode().split(","))
+
+        # return set(self.redis_conn.get(key).decode().split(","))
 
     def redis_query(self, campus, building, start_time, end_time):   
         result = {}
@@ -125,6 +131,9 @@ class redis_connector:
     def redis_query_available_buildings(self, campus, start_time, end_time):
         result = []
         for building in building_code_to_string.keys():
+            if building[:4] != campus:
+                continue
+
             for cl in range(start_time, end_time + 1):
                 temp = self.redis_single_query(campus, building, cl)
                 if len(temp) > 0:
