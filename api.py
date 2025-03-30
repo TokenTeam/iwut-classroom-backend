@@ -36,6 +36,7 @@ scheduler.add_job(update_redis.sync_mysql_to_redis, trigger)
 async def start_scheduler():
     scheduler.start()
     parseDetail.init_database()
+    update_redis.sync_mysql_to_redis()
 
 # 关闭时关闭调度器
 @app.on_event("shutdown")
