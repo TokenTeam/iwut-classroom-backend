@@ -24,8 +24,6 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8080
 
-ENV NAME World
-
-CMD ["sh", "-c", "python update_redis.py && uvicorn api:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "python update_redis.py && uvicorn api:app --host 0.0.0.0 --port 8080"]
