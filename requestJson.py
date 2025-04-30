@@ -36,37 +36,30 @@ building_code_to_string = {
 }
 
 def request_list():
-    url = "https://jwxt.whut.edu.cn/jwapp/sys/kcbcxby/modules/jskcb/jscx.do"
+    domain = getenv("JWXT_DOMAIN")
+    
+    url = f"https://{domain}/jwapp/sys/kcbcxby/modules/jskcb/jscx.do"
 
     headers = {
         "accept": "application/json, text/javascript, */*; q=0.01",
         "accept-encoding": "gzip, deflate, br, zstd",
         "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-        "connection": "keep-alive",
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        # "connection": "keep-alive",        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
         "cookie": getenv("COOKIE"),
-        "host": "jwxt.whut.edu.cn",
-        "origin": "https://jwxt.whut.edu.cn",
-        "referer": "https://jwxt.whut.edu.cn/jwapp/sys/kcbcxby/*default/index.do?THEME=indigo",
-        "sec-ch-ua": '"Chromium";v="134", "Not:A-Brand";v="24", "Microsoft Edge";v="134"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"Windows"',
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0",
-        "x-requested-with": "XMLHttpRequest"
     }
 
     data = {
         "querySetting": '[{"name":"SFYPK","builder":"equal","linkOpt":"AND","value":"1"}]',
-        "XNXQDM": getenv("XNXQDM"),
+        # "XNXQDM": getenv("XNXQDM"),
+        "XNXQDM": "2024-2025-2",
         "*order": "+XXXQDM,+JXLDM,+JASMC",
-        "pageSize": getenv("PAGE_SIZE"),
+        # "pageSize": getenv("PAGE_SIZE"),
+        "pageSize": "841",
         "pageNumber": "1"
     }
 
     response = requests.post(url, headers=headers, data=data)
+    print(response.text)
     
     print(f"获取到{len(response.json()['datas']['jscx']['rows'])}条信息")
 
@@ -77,20 +70,14 @@ def request_list():
         file.write(response.text)
         
 def request_detail(classroom_code):
-    url = 'https://jwxt.whut.edu.cn/jwapp/sys/kcbcxby/modules/jskcb/jaskcb.do'
+    domain = getenv("JWXT_DOMAIN")
+    url = f'https://{domain}/jwapp/sys/kcbcxby/modules/jskcb/jaskcb.do'
     headers = {
         'accept': 'application/json, text/javascript, */*; q=0.01',
         'accept-encoding': 'gzip, deflate, br, zstd',
         'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-        'connection': 'keep-alive',
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'cookie': getenv("COOKIE"),
-        'origin': 'https://jwxt.whut.edu.cn',
-        'referer': 'https://jwxt.whut.edu.cn/jwapp/sys/kcbcxby/*default/index.do?THEME=indigo&THEME_VARIABLES=&RADIUS=20&EMAP_LANG=zh&forceApp=kcbcxby&_yhz=00000ef212c48c8f84be79acbd9d81b090f51&min=1',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0',
-        'x-requested-with': 'XMLHttpRequest'
     }
     data = {
         'XNXQDM': getenv("XNXQDM"),
@@ -137,5 +124,6 @@ def get_detail():
     
     
 if __name__ == "__main__":
-    get_detail()
+    request_list()
+    # get_detail()
     # request_detail('0101020101')

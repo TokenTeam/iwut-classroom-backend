@@ -1,4 +1,3 @@
-# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
 ARG _MYSQL_HOST
@@ -21,7 +20,8 @@ ARG _PAGE_SIZE
 
 ARG _COOKIE
 
-# Define environment variables for database configuration
+ARG _JWXT_DOMAIN
+
 ENV MYSQL_HOST=${_MYSQL_HOST}
 ENV MYSQL_USER=${_MYSQL_USER}
 ENV MYSQL_PASSWORD=${_MYSQL_PASSWORD}
@@ -37,29 +37,14 @@ ENV XNXQDM=${_XNXQDM}
 ENV PAGE_SIZE=${_PAGE_SIZE}
 
 ENV COOKIE=${_COOKIE}
+ENV JWXT_DOMAIN=${_JWXT_DOMAIN}
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 80 available to the world outside this container
 EXPOSE 8000
 
-
-
-# Define other environment variables
-ENV NAME World
-
-# # Run app.py when the container launches
-# CMD ["python", "app.py"]
-
-# 设置 FastAPI 启动命令
-# CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
-
-# Run update_redis.py before starting the FastAPI app
 CMD ["sh", "-c", "python update_redis.py && uvicorn api:app --host 0.0.0.0 --port 8000"]
