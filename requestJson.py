@@ -10,8 +10,8 @@
 import requests
 import json
 import time
-from tqdm import tqdm
 from os import getenv
+from tqdm import tqdm
 
 building_code_to_string = {
     "010102": "弘毅楼(附楼)",
@@ -35,23 +35,20 @@ building_code_to_string = {
     "030201": "航海楼",
 }
 
-def request_list():
-    domain = getenv("JWXT_DOMAIN")
-    
+def request_list(domain, cookie, xnxqdm):
     url = f"https://{domain}/jwapp/sys/kcbcxby/modules/jskcb/jscx.do"
 
     headers = {
         "accept": "application/json, text/javascript, */*; q=0.01",
         "accept-encoding": "gzip, deflate, br, zstd",
         "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-        # "connection": "keep-alive",        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "cookie": getenv("COOKIE"),
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "cookie": cookie,
     }
 
     data = {
         "querySetting": '[{"name":"SFYPK","builder":"equal","linkOpt":"AND","value":"1"}]',
-        # "XNXQDM": getenv("XNXQDM"),
-        "XNXQDM": "2024-2025-2",
+        "XNXQDM": xnxqdm,
         "*order": "+XXXQDM,+JXLDM,+JASMC",
         # "pageSize": getenv("PAGE_SIZE"),
         "pageSize": "841",
@@ -69,18 +66,17 @@ def request_list():
     with open('list.json', 'w', encoding='utf-8') as file:
         file.write(response.text)
         
-def request_detail(classroom_code):
-    domain = getenv("JWXT_DOMAIN")
+def request_detail(classroom_code, domain, cookie, xnxqdm):
     url = f'https://{domain}/jwapp/sys/kcbcxby/modules/jskcb/jaskcb.do'
     headers = {
         'accept': 'application/json, text/javascript, */*; q=0.01',
         'accept-encoding': 'gzip, deflate, br, zstd',
         'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'cookie': getenv("COOKIE"),
+        'cookie': cookie,
     }
     data = {
-        'XNXQDM': getenv("XNXQDM"),
+        'XNXQDM': xnxqdm,
         'JASDM': classroom_code
     }
 
@@ -102,7 +98,7 @@ def request_detail(classroom_code):
     
     
     
-def get_detail():
+def get_detail(domain, cookie, xnxqdm):
     with open('list.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
     
@@ -117,13 +113,16 @@ def get_detail():
         if code[:6] not in building_code_keys:
             continue
         
-        request_detail(code) 
-        time.sleep(5)
+        request_detail(code, domain, cookie, xnxqdm) 
+        time.sleep(0.5)
         
     
     
     
 if __name__ == "__main__":
-    request_list()
-    # get_detail()
-    # request_detail('0101020101')
+    domain = getenv("JWXT_DOMAIN") or "jwxt.whut.edu.cn"
+    cookie = getenv("COOKIE") or ""
+    xnxqdm = getenv("XNXQDM") or "2025-2026-2"
+    request_list(domain, cookie, xnxqdm)
+    get_detail(domain, cookie, xnxqdm)
+    # request_detail('0101020101', domain, cookie, xnxqdm)

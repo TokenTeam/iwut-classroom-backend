@@ -50,6 +50,7 @@
 - detail_example.py   每间教室的详细课程信息
 - detials.zip    一版所有教室的详细信息的打包
 - list.json    一版教室列表
+- initdb.py    独立的数据库初始化脚本，连接 MySQL 建表并将 details 中的 JSON 数据解析写入，支持通过环境变量或默认值配置数据库连接
 - parseDetail.py    解析每间教室的详细信息，并把解析好的信息存到 mysql 数据库
 - requestJson.py    获取教室列表以及每间教室的详细课表
 - update_redis.py   每天运行，更新每天的 Redis 数据

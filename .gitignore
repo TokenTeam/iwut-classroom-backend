@@ -63,3 +63,7 @@ Pipfile.lock
 
 tempCodeRunnerFile.py
 docker-compose.yml
+
+details
+empty_classrooms.sql
+list.json
